@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -26,17 +28,18 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {[
-                { label: 'Services', href: '#services' },
-                { label: 'Team', href: '#team' },
-                { label: 'Testimonials', href: '#testimonials' },
+                { label: 'Services', href: '/#services' },
+                { label: 'Team', href: '/#team' },
+                { label: 'Testimonials', href: '/#testimonials' },
+                { label: 'About', href: '/about' }, {/* Changed: Added About link */}
               ].map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-navy-300 transition-colors duration-200 hover:text-indigo-400"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
