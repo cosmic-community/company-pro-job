@@ -1,7 +1,19 @@
 import Link from 'next/link'
 
+interface FooterLink {
+  label: string
+  href: string
+}
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+
+  const quickLinks: FooterLink[] = [
+    { label: 'Services', href: '/#services' },
+    { label: 'Team', href: '/#team' },
+    { label: 'Testimonials', href: '/#testimonials' },
+    { label: 'About', href: '/about' },
+  ]
 
   return (
     <footer id="contact" className="bg-navy-900 text-white">
@@ -27,12 +39,7 @@ export default function Footer() {
               Quick Links
             </h3>
             <ul className="space-y-3">
-              {[
-                { label: 'Services', href: '/#services' },
-                { label: 'Team', href: '/#team' },
-                { label: 'Testimonials', href: '/#testimonials' },
-                { label: 'About', href: '/about' }, {/* Changed: Added About link */}
-              ].map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
