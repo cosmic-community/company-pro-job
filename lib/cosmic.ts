@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk'
-import type { Service, TeamMember, Testimonial } from '@/types'
+import type { Service, TeamMember, Testimonial, AboutPage } from '@/types'
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -54,5 +54,21 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       return []
     }
     throw new Error('Failed to fetch testimonials')
+  }
+}
+
+// Changed: Added getAboutPage function to fetch the about page singleton
+export async function getAboutPage(): Promise<AboutPage | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'about-pages', slug: 'about' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+    return response.object as AboutPage
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null
+    }
+    throw new Error('Failed to fetch about page')
   }
 }
