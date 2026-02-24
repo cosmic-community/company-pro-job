@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import TeamCard from '@/components/TeamCard'
 import { getTeamMembers, getServices, getAboutPage } from '@/lib/cosmic'
-import type { AboutValue } from '@/types'
+import type { AboutValue, TeamMember } from '@/types'
 
 export const revalidate = 60
 
@@ -97,16 +97,20 @@ export default async function AboutPage() {
   const ctaSecondaryText = content?.cta_secondary_text || defaults.cta_secondary_text
   const ctaSecondaryLink = content?.cta_secondary_link || defaults.cta_secondary_link
 
-  // Changed: Parse values from JSON string or use defaults
+  // Changed: Parse values - handle both array and JSON string formats
   let values: AboutValue[] = defaults.values
   if (content?.values) {
-    try {
-      const parsed: unknown = JSON.parse(content.values)
-      if (Array.isArray(parsed)) {
-        values = parsed as AboutValue[]
+    if (Array.isArray(content.values)) {
+      values = content.values as AboutValue[]
+    } else if (typeof content.values === 'string') {
+      try {
+        const parsed: unknown = JSON.parse(content.values)
+        if (Array.isArray(parsed)) {
+          values = parsed as AboutValue[]
+        }
+      } catch {
+        // Use defaults if JSON parsing fails
       }
-    } catch {
-      // Use defaults if JSON parsing fails
     }
   }
 
@@ -224,7 +228,7 @@ export default async function AboutPage() {
             </div>
 
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {values.map((value) => (
+              {values.map((value: AboutValue) => (
                 <div
                   key={value.title}
                   className="rounded-2xl border border-navy-100 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
@@ -261,7 +265,7 @@ export default async function AboutPage() {
 
             {teamMembers.length > 0 ? (
               <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {teamMembers.map((member) => (
+                {teamMembers.map((member: TeamMember) => (
                   <TeamCard key={member.id} member={member} />
                 ))}
               </div>

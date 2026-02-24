@@ -1,11 +1,11 @@
 // Cosmic file/image type
-interface CosmicFile {
+export interface CosmicFile {
   url: string
   imgix_url: string
 }
 
 // Base Cosmic object
-interface CosmicObject {
+export interface CosmicObject {
   id: string
   title: string
   slug: string
@@ -63,7 +63,7 @@ export interface AboutPage extends CosmicObject {
     values_badge: string
     values_heading: string
     values_description: string
-    values: string // JSON string of AboutValue[]
+    values: AboutValue[] | string
     team_badge: string
     team_heading: string
     team_description: string
